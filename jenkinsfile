@@ -4,10 +4,10 @@ pipeline {
     }
 environment {
 
-        ECR-REPO-ID : "d2y4y8m3"
-        AWS-REGION : "us-east-1"
-        IMAGE-NAME : "srikari-technical-test"
-        IMAGE-VERSION : "latest"
+        ECR-REPO-ID = 'd2y4y8m3'
+        AWS-REGION = 'us-east-1'
+        IMAGE-NAME = 'srikari-technical-test'
+        IMAGE-VERSION = 'latest'
         
     }
     stages {
