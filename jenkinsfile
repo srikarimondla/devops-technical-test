@@ -2,13 +2,37 @@ pipeline {
     agent {
        label 'java-docker-slave'
     }
-    stages {
-        stage('Build') { 
-            steps {
-                sh 'chmod +x mvnw'
-                sh './mvnw clean package' 
-                sh 'docker build -t srikari/devops-technical-test . -f Dockerfile'
-            }
-        }
+environment {
+
+        ECR-REPO-ID = "d2y4y8m3"
+        AWS-REGION = "us-east-1"
+        IMAGE-NAME = "srikari-technical-test"
+        IMAGE-VERSION = "latest"
+        
     }
+    stages {
+        stage('Build_Application') { 
+            steps {
+                sh '''
+                    chmod +x mvnw && \
+                    ./mvnw clean package
+                '''
+           }
+        }
+        stage('Build_Docker_image'){
+          steps {
+                sh 'docker build -t  $IMAGE-NAME:$IMAGE-VERSION . -f Dockerfile'
+                  
+            }
+       }
+        stage('Push_AWS_ECR'){
+          steps {
+                sh '''
+                     aws ecr-public get-login-password $AWS-REGION  | docker login --username AWS --password-stdin public.ecr.aws/$ECR-REPO-ID
+                     docker tag $IMAGE-NAME:$IMAGE-VERSION public.ecr.aws/$ECR-REPO-ID/$IMAGE-NAME:$IMAGE-VERSION
+                     docker push public.ecr.aws/$ECR-REPO-ID/$IMAGE-NAME:$IMAGE-VERSION
+                   '''
+            }
+      }      
+}
 }
