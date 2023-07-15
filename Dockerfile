@@ -22,7 +22,7 @@ WORKDIR /app
 
 # Copy the application JAR file
 
-COPY application-1.0.0-SNAPSHOT.jar /app/application-1.0.0-SNAPSHOT.jar
+COPY target/application-1.0.0-SNAPSHOT.jar /app/application-1.0.0-SNAPSHOT.jar
 
 
 # Expose port 8080
