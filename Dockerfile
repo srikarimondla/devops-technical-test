@@ -1,11 +1,6 @@
 # Use Alpine Linux as the base image
 
-FROM alpine:latest
-
-
-# Install OpenJDK 11 from Adoptium
-
-RUN apk add --no-cache openjdk11
+FROM adoptopenjdk/openjdk11:alpine
 
 
 # Set the JAVA_HOME environment variable
@@ -32,4 +27,4 @@ EXPOSE 8080
 
 # Run the application
 
-CMD ["/bin/sh", "-c", "java", "-jar", "/app/application-1.0.0-SNAPSHOT.jar"]
+CMD ["java", "-jar", "/app/application-1.0.0-SNAPSHOT.jar"]
