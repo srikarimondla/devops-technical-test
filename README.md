@@ -18,3 +18,14 @@ We would like you to create a Jenkinsfile (and any other necessary artefacts) th
 - Fork this repo into your own GitHub account
 - To build the application run ./mvnw clean package
 - Put any assumptions, notes and instructions into your README.md.
+
+
+Jenkins Dependencies:
+# Agent:
+- I have used a Docker agent is configured in jenkins. 
+- This Docker agent was configured to run on a EC2 t2-micro instance which has docker running.
+- The Docker slave image I used was having GIT, MAVEN, JDK, Docker and AWS CLI.
+- The Docker file  
+
+
+
