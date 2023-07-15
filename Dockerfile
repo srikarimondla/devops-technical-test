@@ -32,4 +32,4 @@ EXPOSE 8080
 
 # Run the application
 
-CMD ["java", "-jar", "/app/application-1.0.0-SNAPSHOT.jar"]
+CMD ["/bin/sh", "-c", "java", "-jar", "/app/application-1.0.0-SNAPSHOT.jar"]
