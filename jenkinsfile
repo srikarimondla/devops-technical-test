@@ -1,0 +1,49 @@
+pipeline {
+    agent {
+       label 'java-docker-slave'
+    }
+environment {
+
+        ECR_REPO_ID = 'd2y4y8m3'
+        ECR_REPO_NAME = 'srikari-public-repo'
+        ECR_REPO_VERSION = 'latest'
+        AWS_REGION = 'us-east-1'
+        IMAGE_NAME = 'srikari-technical-test'
+        IMAGE_VERSION = 'latest'
+        AWS_CREDENTIALS_ID = '077102287399'
+        
+    }
+    stages {
+        stage('Build_Application') { 
+            steps {
+                sh '''
+                    chmod +x mvnw && \
+                    ./mvnw clean package
+                '''
+           }
+        }
+        stage('Build_Docker_image'){
+          steps {
+                sh 'docker build -t  $IMAGE_NAME:$IMAGE_VERSION . -f Dockerfile'
+                  
+            }
+       }
+        stage('Push_AWS_ECR'){
+          steps {
+                withCredentials([
+                    aws(credentialsId: "$AWS_CREDENTIALS_ID", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
+                    sh '''
+                        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                        export AWS_DEFAULT_REGION=$AWS_REGION
+                        aws ecr-public get-login-password --region $AWS_REGION  | docker login --username AWS --password-stdin public.ecr.aws/$ECR_REPO_ID
+                        docker tag $IMAGE_NAME:$IMAGE_VERSION public.ecr.aws/$ECR_REPO_ID/$ECR_REPO_NAME:$ECR_REPO_VERSION
+                        docker push public.ecr.aws/$ECR_REPO_ID/$ECR_REPO_NAME:$ECR_REPO_VERSION
+                     
+                    '''
+                }
+                            }
+      }      
+}
+}
