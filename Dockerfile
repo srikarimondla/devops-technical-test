@@ -3,13 +3,6 @@
 FROM adoptopenjdk/openjdk11:alpine
 
 
-# Set the JAVA_HOME environment variable
-
-ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk
-
-ENV PATH="$PATH:$JAVA_HOME/bin"
-
-
 # Set the working directory
 
 WORKDIR /app
